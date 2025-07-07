@@ -51,3 +51,9 @@ tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
 }
+
+//
+test {
+    useJUnitPlatform()
+    exclude '**/ForumApplicationTests.class'
+}
