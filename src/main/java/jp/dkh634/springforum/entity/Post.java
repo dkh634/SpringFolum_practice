@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class Post {
 	@Id
-	public int id;
+	public Long id;
 	private String title;
     private String content;
     private String authorName;

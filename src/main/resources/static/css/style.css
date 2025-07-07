@@ -1,0 +1,10 @@
+table {
+  border-collapse: collapse;
+}
+th, td {
+  border: solid 1px #333; /* 線の種類 太さ 色 */
+}
+
+.post {
+  margin-bottom: 1.5rem;  /* 投稿同士のスペース */
+}
