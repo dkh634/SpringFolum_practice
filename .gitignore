@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# 全ての application-*.properties を無視
+src/main/resources/application*.properties
