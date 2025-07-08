@@ -1,37 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>掲示板アプリ</title>
-     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
     <div class="board-container">
-	  <h1>掲示板</h1>
-	
-	  <div class="post">
-		  <h2>タイトル</h2>
+        <h1>掲示板</h1>
 		
-		  <div class="meta">
-		    <span >投稿者</span> |
-		    <span>投稿日時</span>
-		    <span>
-		      （更新: <span></span>）
-		    </span>
-		  </div>
-		
-		  <div>本文がここに入ります。</div>
-		</div>
-	
-	  <form method="post" action="/api/post">
-	    <label for="authorName">名前</label><br>
-	    <input type="text" id="authorName" name="authorName"><br>
-	
-	    <label for="content">メッセージ</label><br>
-	    <textarea id="content" name="content" rows="4"></textarea><br>
-	
-	    <button type="submit">投稿</button>
-	  </form>
-	</div>
+        <div class="post">
+            <h2>タイトル</h2>
+
+            <div th:each="post : ${latestAllPosts}">
+                <span th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">投稿日時</span>
+                <p th:text="${post.content}">内容</p>
+            </div>
+        </div>
+
+        <form method="post" action="/api/post">
+            <label for="authorName">名前</label><br />
+            <input type="text" id="authorName" name="authorName" /><br />
+
+            <label for="content">メッセージ</label><br />
+            <textarea id="content" name="content" rows="4"></textarea><br />
+
+            <button type="submit">投稿</button>
+        </form>
+    </div>
 </body>
 </html>

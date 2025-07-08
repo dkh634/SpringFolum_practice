@@ -1,6 +1,7 @@
 package jp.dkh634.springforum.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,6 @@ public class ForumController {
 	
 	@Autowired
 	PostRepository postrepo;
-
-	@GetMapping("/api/home")
-	public String displayHome() {
-		return "home";
-	}
 	
 	@PostMapping("/api/post")
 	public String reservePost(@ModelAttribute ForumPostForm postForm,Model model) {
@@ -56,8 +52,22 @@ public class ForumController {
 		
 		//挿入できているか確認
 		System.out.println(postedData);
-		return "home";
+		
+		//modelに格納する
+		model.addAttribute("postedData",postedData);
+		 return "redirect:/api/home";
 	}
+	
+	@GetMapping("/api/home")
+	public String displayHome(Model model) {
+	    // 最新の投稿1件を取得する（例：投稿日時で並び替え）
+	    List<Post> latestAllPosts = postrepo.findAllByOrderByCreatedAtAsc();
+	    model.addAttribute("latestAllPosts", latestAllPosts);  // ← これがあればhome.htmlで使える
+	    return "home";
+	}
+
+	
+	
 	
 	
 }
