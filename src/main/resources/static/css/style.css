@@ -5,7 +5,7 @@ th, td {
   border: solid 1px #333; /* 線の種類 太さ 色 */
 }
 
-.post {
+.display {
   border: 10px solid #ccc;
   margin: 10px 40px 40px 10px; 
   max-width: 500px;
@@ -13,3 +13,31 @@ th, td {
   padding-left: 20px; /* 左側の内側余白でスペース確保 */
   padding-bottom: 20px;
 }
+
+#authorName {
+  max-width: 500px;
+  padding: 8px 12px;    /* 内側の余白 */
+  margin-bottom: 16px;  /* 下にスペース */
+  border: 1px solid #ccc; /* 薄い枠線 */
+  border-radius: 4px;   /* 角丸 */
+  font-size: 1rem;      /* 文字サイズ */
+  box-sizing: border-box; /* padding含めて幅調整 */
+}
+
+#content {
+  width: 500px;
+  max-width: 1000px;
+  padding: 8px 12px;    /* 内側の余白 */
+  margin-bottom: 16px;  /* 下にスペース */
+  border: 1px solid #ccc; /* 薄い枠線 */
+  border-radius: 4px;   /* 角丸 */
+  font-size: 1rem;      /* 文字サイズ */
+  box-sizing: border-box; /* padding含めて幅調整 */
+}
+
+.post-content {
+  max-width: 600px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
