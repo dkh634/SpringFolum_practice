@@ -9,12 +9,12 @@
     <div class="board-container">
         <h1>掲示板</h1>
 		
-        <div class="post">
+        <div class="display">
             <h2>タイトル</h2>
 
             <div th:each="post : ${latestAllPosts}">
                 <span th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">投稿日時</span>
-                <p th:text="${post.content}">内容</p>
+                <p class="post-content" th:text="${post.content}">内容</p>
             </div>
         </div>
 

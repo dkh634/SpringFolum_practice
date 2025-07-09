@@ -25,9 +25,9 @@ public class PostRepositoryTest {
         mockPost.setContent("これはモックデータです");
         mockPost.setAuthorName("たけぞう");
 
-        when(postRepositoryMock.findById(1)).thenReturn(Optional.of(mockPost));
+        when(postRepositoryMock.findById(1L)).thenReturn(Optional.of(mockPost));
 
-        Optional<Post> result = postRepositoryMock.findById(1);
+        Optional<Post> result = postRepositoryMock.findById(1L);
 
         assertTrue(result.isPresent());
         assertEquals("モックの投稿", result.get().getTitle());
@@ -42,10 +42,10 @@ public class PostRepositoryTest {
         mockPost.setAuthorName("たけぞう");
 
         when(postRepositoryMock.save(mockPost)).thenReturn(mockPost);
-        when(postRepositoryMock.findById(2)).thenReturn(Optional.of(mockPost));
+        when(postRepositoryMock.findById(2L)).thenReturn(Optional.of(mockPost));
 
         postRepositoryMock.save(mockPost);
-        Optional<Post> result = postRepositoryMock.findById(2);
+        Optional<Post> result = postRepositoryMock.findById(2L);
 
         assertTrue(result.isPresent());
         assertEquals("新規投稿", result.get().getTitle());
