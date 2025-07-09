@@ -12,7 +12,9 @@
         <div class="display">
             <h2>タイトル</h2>
 
-            <div th:each="post : ${latestAllPosts}">
+            <div th:each="post : ${latestAllPosts}" 
+            	 th:onclick="|window.location.href='/api/delete/${post.id}'|"
+     			style="cursor: pointer;">
                 <span th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">投稿日時</span>
                 <p class="post-content" th:text="${post.content}">内容</p>
             </div>
@@ -28,5 +30,7 @@
             <button type="submit">投稿</button>
         </form>
     </div>
+    
+     <script th:src="@{/js/home.js}"></script>
 </body>
 </html>

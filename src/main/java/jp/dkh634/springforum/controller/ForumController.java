@@ -2,12 +2,14 @@ package jp.dkh634.springforum.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jp.dkh634.springforum.entity.Post;
@@ -65,9 +67,15 @@ public class ForumController {
 	    model.addAttribute("latestAllPosts", latestAllPosts);  // ← これがあればhome.htmlで使える
 	    return "home";
 	}
-
 	
-	
-	
-	
+	@GetMapping("/api/delete/{id}")
+	public String deletePost(@PathVariable Long id) {
+		Optional<Post> foundPost=postrepo.findById(id);
+		if(foundPost.isPresent()) {
+			postrepo.deleteCommentsByPostId(id);
+			postrepo.deleteById(id);
+		}
+	   
+	      return "redirect:/api/home";
+	}
 }
