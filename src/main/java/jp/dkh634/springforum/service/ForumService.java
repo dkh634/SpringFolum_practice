@@ -32,6 +32,7 @@ public class ForumService {
 		post.setAuthorName(postForm.getAuthorName());
 		post.setContent(postForm.getContent());
 		post.setCreatedAt(LocalDateTime.now());
+		//Todo 更新時刻を呼び出す必要あり。
 		post.setUpdatedAt(null);
 		//Todo:タイトルをどうするかはのちに決める
 		post.setTitle("test");
@@ -42,7 +43,7 @@ public class ForumService {
 	/*
 	 * DBに保存する
 	 */
-	public Post saveDateBase(Post post) {
+	public Post saveToDateBase(Post post) {
 		Post postresult = postrepo.save(post);
 		return postresult;
 	}
@@ -55,6 +56,9 @@ public class ForumService {
 	}
     
 
+	/*
+	 * idに紐づくコメントを削除する
+	 */
 	public void delete(Long id){
 		Optional<Post> foundPost=postrepo.findById(id);
 		if(foundPost.isPresent()) {
