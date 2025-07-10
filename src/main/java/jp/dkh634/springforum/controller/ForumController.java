@@ -30,7 +30,7 @@ public class ForumController {
 		Post post =service.toEntity(postForm);
 		
 		//DB処理を入れる
-		Post postedData = service.saveDateBase(post);
+		Post postedData = service.saveToDateBase(post);
 		
 		
 		//modelに格納する
