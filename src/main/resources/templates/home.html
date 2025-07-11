@@ -12,11 +12,14 @@
         <div class="display">
             <h2>タイトル</h2>
 
-            <div th:each="post : ${latestAllPosts}" 
-            	 th:onclick="|window.location.href='/api/delete/${post.id}'|"
-     			style="cursor: pointer;">
-                <span th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">投稿日時</span>
-                <p class="post-content" th:text="${post.content}">内容</p>
+            <div th:each="post : ${latestAllPosts}" >
+				<div class="post-container">
+				  <div class="post-header">
+				    <span class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">日時</span>
+				    <span class="deleteConfirmButton" th:onclick="|deletePost(${post.id})|">×</span>
+				  </div>
+				  <p class="post-content" th:text="${post.content}">コメント</p>
+				</div>
             </div>
         </div>
 

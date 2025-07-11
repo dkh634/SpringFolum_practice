@@ -35,9 +35,31 @@ th, td {
   box-sizing: border-box; /* padding含めて幅調整 */
 }
 
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;            /* 日時と×の横の隙間 */
+  margin-bottom: 4px;  /* コメントとの縦の余白を小さく */
+}
+
+/*.post-date {*/
+/*   必要に応じて文字サイズや色など */
+/*}*/
+
+.deleteConfirmButton {
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0 6px;  /* ボタンの内側余白 */
+  user-select: none; /* テキスト選択されないように */
+}
+
 .post-content {
+  margin-top: 0;  /* コメント上の余白を詰める */
+  margin-bottom: 12px; /* 下余白はお好みで */
   max-width: 600px;
   word-wrap: break-word;
   white-space: normal;
 }
+
 
