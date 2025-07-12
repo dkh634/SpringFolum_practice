@@ -62,13 +62,13 @@ public class ForumService {
 	public void delete(Long id){
 		Optional<Post> foundPost=postrepo.findById(id);
 		if(foundPost.isPresent()) {
-			postrepo.deleteCommentsByPostId(id);
+			postrepo.deletePostByPostId(id);
 			postrepo.deleteById(id);
 		}
 	}
 	
 	/*
-	 * 全部
+	 * 
 	 */
 	
 	

@@ -17,6 +17,6 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 	
 	@Modifying
     @Transactional
-    @Query("DELETE FROM comments WHERE post_id = :postId")
-    void deleteCommentsByPostId(@Param("postId") Long postId);
+    @Query("DELETE FROM post WHERE id = :postId")
+    void deletePostByPostId(@Param("postId") Long postId);
 }
