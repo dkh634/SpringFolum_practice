@@ -56,10 +56,15 @@ th, td {
 
 .post-content {
   margin-top: 0;  /* コメント上の余白を詰める */
-  margin-bottom: 12px; /* 下余白はお好みで */
+  margin-bottom: 0px; /* 下余白はお好みで */
   max-width: 600px;
   word-wrap: break-word;
   white-space: normal;
 }
 
+#reply {
+  margin-top: 0;  /* コメント上の余白を詰める */
+  margin-left: 170px;
+  margin-bottom: 12px; /* 下余白はお好みで */
+}
 
