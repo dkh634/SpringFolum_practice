@@ -144,7 +144,6 @@ public class ServiceTest {
 	        service.delete(id);
 
 	        // Assert
-	        verify(postRepositoryMock).deleteCommentsByPostId(id);
 	        verify(postRepositoryMock).deleteById(id);
 	    }
 
@@ -157,8 +156,6 @@ public class ServiceTest {
 	        // Act
 	        service.delete(id);
 
-	        // Assert
-	        verify(postRepositoryMock, never()).deleteCommentsByPostId(any());
 	        verify(postRepositoryMock, never()).deleteById(any());
 	    
 	    }

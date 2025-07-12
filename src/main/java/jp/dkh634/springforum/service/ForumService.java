@@ -62,7 +62,6 @@ public class ForumService {
 	public void delete(Long id){
 		Optional<Post> foundPost=postrepo.findById(id);
 		if(foundPost.isPresent()) {
-			postrepo.deletePostByPostId(id);
 			postrepo.deleteById(id);
 		}
 	}
