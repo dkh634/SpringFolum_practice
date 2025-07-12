@@ -66,7 +66,7 @@ public class ServiceTest {
 		expectedPost.setContent("asdfghjkl");
 		expectedPost.setCreatedAt(LocalDateTime.now());
 		//Todo：あとで削除します
-		expectedPost.setUpdatedAt(null);
+		
 		//Todo：固定値から変動値に変更します
 		expectedPost.setTitle("test");
 
@@ -75,7 +75,7 @@ public class ServiceTest {
         assertEquals(expectedPost.getContent(), resultPost.getContent());
         assertEquals(expectedPost.getTitle(), resultPost.getTitle());
         assertTrue(expectedPost.getCreatedAt().isAfter(resultPost.getCreatedAt().minusSeconds(3)));
-        assertEquals(expectedPost.getUpdatedAt(), resultPost.getUpdatedAt());
+        
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class ServiceTest {
 		expectedPost.setContent("asdfghjkl");
 		expectedPost.setCreatedAt(LocalDateTime.now());
 		//Todo：あとで削除します
-		expectedPost.setUpdatedAt(null);
+		
 		//Todo：固定値から変動値に変更します
 		expectedPost.setTitle("test");
 		
@@ -104,7 +104,7 @@ public class ServiceTest {
         assertEquals(expectedPost.getContent(), postresult.getContent());
         assertEquals(expectedPost.getTitle(), postresult.getTitle());
         assertTrue(expectedPost.getCreatedAt().isAfter(postresult.getCreatedAt().minusSeconds(3)));
-        assertEquals(expectedPost.getUpdatedAt(), postresult.getUpdatedAt());
+        
 	}
 
 	 @Test
@@ -120,7 +120,7 @@ public class ServiceTest {
 
 	        List<Post> mockList = Arrays.asList(post1, post2);
 
-	        when(postRepositoryMock.findAllByOrderByCreatedAtAsc()).thenReturn(mockList);
+	        when(postRepositoryMock.findAllByDeletedFalseOrderByCreatedAtAsc()).thenReturn(mockList);
 
 	        // Act
 	        List<Post> result = service.findAll();
@@ -144,7 +144,7 @@ public class ServiceTest {
 	        service.delete(id);
 
 	        // Assert
-	        verify(postRepositoryMock).deleteById(id);
+	        verify(postRepositoryMock).logicallyDeleteById(id);
 	    }
 
 	    @Test

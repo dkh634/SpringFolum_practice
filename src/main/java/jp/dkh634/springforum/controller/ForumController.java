@@ -50,4 +50,6 @@ public class ForumController {
 		service.delete(id);
 	    return "redirect:/api/home";
 	}
+	
+	
 }

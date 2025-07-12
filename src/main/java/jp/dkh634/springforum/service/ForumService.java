@@ -32,10 +32,9 @@ public class ForumService {
 		post.setAuthorName(postForm.getAuthorName());
 		post.setContent(postForm.getContent());
 		post.setCreatedAt(LocalDateTime.now());
-		//Todo 更新時刻を呼び出す必要あり。
-		post.setUpdatedAt(null);
 		//Todo:タイトルをどうするかはのちに決める
 		post.setTitle("test");
+		post.setDeleted(false);
 		
 		return post;
 	}
@@ -52,7 +51,7 @@ public class ForumService {
 	 * DBをすべて取得する
 	 */
 	public List<Post> findAll(){
-		return postrepo.findAllByOrderByCreatedAtAsc();
+		return postrepo.findAllByDeletedFalseOrderByCreatedAtAsc();
 	}
     
 
@@ -62,7 +61,7 @@ public class ForumService {
 	public void delete(Long id){
 		Optional<Post> foundPost=postrepo.findById(id);
 		if(foundPost.isPresent()) {
-			postrepo.deleteById(id);
+			postrepo.logicallyDeleteById(id);
 		}
 	}
 	
