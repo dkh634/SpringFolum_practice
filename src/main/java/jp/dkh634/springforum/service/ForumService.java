@@ -66,4 +66,10 @@ public class ForumService {
 			postrepo.deleteById(id);
 		}
 	}
+	
+	/*
+	 * 全部
+	 */
+	
+	
 }
