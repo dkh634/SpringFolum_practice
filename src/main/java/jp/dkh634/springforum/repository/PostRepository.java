@@ -16,12 +16,15 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE post SET deleted = true WHERE id = :id", nativeQuery = true)
-    void logicallyDeleteById(@Param("id") Long id);
+    @Query(value = "UPDATE post SET deleted = true WHERE content_id = :contentId and thread_id = :threadId", nativeQuery = true)
+    void logicallyDeleteById(@Param("contentId") Long contentId,@Param("threadId") Long threadId );
     
-    // 論理削除されていないデータだけ取得
-    List<Post> findAllByDeletedFalseOrderByCreatedAtAsc();
-    
-   
+    // 論理削除されておらず、引数で渡したthreadIdに紐づくレコードを取得する
+    @Query(value = "SELECT * FROM post WHERE deleted = false AND thread_id = :threadId ORDER BY content_id ", nativeQuery = true)
+    List<Post> findAllByThreadIdAndNotDeleted(@Param("threadId") Long threadId);
+
+    // threadIdで最大contentIdを取得する（存在しなければnull）
+    @Query("SELECT MAX(p.contentId) FROM Post p WHERE p.threadId = :threadId")
+    Long findMaxContentIdByThreadId(@Param("threadId") Long long1);
 }
 

@@ -20,7 +20,7 @@ public class PostRepositoryTest {
     @Test
     public void testFindById() {
         Post mockPost = new Post();
-        mockPost.setId(1L);
+        mockPost.setContentId(1L);
         mockPost.setTitle("モックの投稿");
         mockPost.setContent("これはモックデータです");
         mockPost.setAuthorName("たけぞう");
@@ -36,7 +36,7 @@ public class PostRepositoryTest {
     @Test
     public void testSave() {
         Post mockPost = new Post();
-        mockPost.setId(2L);
+        mockPost.setContentId(2L);
         mockPost.setTitle("新規投稿");
         mockPost.setContent("保存テスト");
         mockPost.setAuthorName("たけぞう");

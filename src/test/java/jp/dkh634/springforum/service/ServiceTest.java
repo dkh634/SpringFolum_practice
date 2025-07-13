@@ -111,11 +111,11 @@ public class ServiceTest {
 	    public void findAll_データが存在する_昇順で返る() {
 	        // Arrange
 	        Post post1 = new Post();
-	        post1.setId(1L);
+	        post1.setContentId(1L);
 	        post1.setCreatedAt(LocalDateTime.of(2023, 1, 1, 10, 0));
 
 	        Post post2 = new Post();
-	        post2.setId(2L);
+	        post2.setContentId(2L);
 	        post2.setCreatedAt(LocalDateTime.of(2023, 1, 2, 10, 0));
 
 	        List<Post> mockList = Arrays.asList(post1, post2);
@@ -127,8 +127,8 @@ public class ServiceTest {
 
 	        // Assert
 	        assertEquals(2, result.size());
-	        assertEquals(1L, result.get(0).getId());
-	        assertEquals(2L, result.get(1).getId());
+	        assertEquals(1L, result.get(0).getContentId());
+	        assertEquals(2L, result.get(1).getContentId());
 	    }
 
 	    @Test
@@ -136,7 +136,7 @@ public class ServiceTest {
 	        // Arrange
 	        Long id = 1L;
 	        Post post = new Post();
-	        post.setId(id);
+	        post.setContentId(id);
 
 	        when(postRepositoryMock.findById(id)).thenReturn(Optional.of(post));
 

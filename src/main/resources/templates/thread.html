@@ -16,11 +16,11 @@
             <div th:each="post : ${latestAllPosts}" >
 				<div class="post-container">
 				  <div class="post-header">
-				    <span class="post-date" th:text="${post.id+' : '+#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">日時</span>
-				    <span class="deleteConfirmButton" th:onclick="|deletePost(${post.id})|">×</span>
+				    <span class="post-date" th:text="${post.contentId+' : '+#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">日時</span>
+				    <span class="deleteConfirmButton" th:onclick="|deletePost(${post.contentId})|">×</span>
 				  </div>
 				  <p class="post-content" th:text="${post.content}">コメント</p>
-				  <p th:onclick="|replyPost(${post.id})|" id="reply">↩</p>
+				  <p th:onclick="|replyPost(${post.contentId})|" id="reply">↩</p>
 				  <hr>
 				</div>
             </div>
@@ -36,6 +36,7 @@
             <p id="replyToId" style="display: none;">返信先ID : </p>
 
             <button type="submit">投稿</button>
+            <a th:href="@{/api/forum}" class="back-button">← スレッド一覧に戻る</a>
         </form>
     </div>
     

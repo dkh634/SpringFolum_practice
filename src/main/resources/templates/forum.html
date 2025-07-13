@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>掲示板アプリ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div class="board-container">
+        <h1>掲示板</h1>
+		
+        <div class="display">
+            <h2>スレッド一覧</h2>
+            <hr>
+
+		<div th:each="thread : ${latestAllThread}">
+		    <div class="thread-container" th:onclick="|selectThread(${thread.threadId})|" style="cursor: pointer;">
+		        <div class="thread-header">
+		            <span class="thread-date" th:text="${thread.threadId + ' : ' + #temporals.format(thread.createdAt, 'yyyy/MM/dd HH:mm')}">日時</span>
+		        </div>
+		        <p class="thread-content" th:text="${thread.title}">スレッドタイトル</p>
+		        <hr>
+		    </div>
+		</div>
+
+    </div>
+    
+     <script th:src="@{/js/forum.js}"></script>
+</body>
+</html>
