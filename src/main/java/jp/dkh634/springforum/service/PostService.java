@@ -11,72 +11,123 @@ import jp.dkh634.springforum.entity.Post;
 import jp.dkh634.springforum.form.ForumPostForm;
 import jp.dkh634.springforum.repository.PostRepository;
 
-
+/**
+ * 投稿（Post）に関する業務ロジックを扱うサービスクラス。
+ * <p>
+ * ForumPostFormからPostエンティティへの変換や、
+ * データベースへの保存、取得、論理削除などを提供する。
+ * </p>
+ */
 @Service
 public class PostService {
-	
-	@Autowired
-	PostRepository postrepo;
-	
-	public int countDataBase() {
-		int count= (int) postrepo.count();
-		System.out.println(count);
-		return count;
-	}
-	
-	/*
-	 * Formからentityに詰め替える
-	 */
-	public Post toEntity(ForumPostForm postForm,Long threadId) {
-	    Post post = new Post();
-	    post.setAuthorName(postForm.getAuthorName());
-	    post.setContent(postForm.getContent());
-	    post.setCreatedAt(LocalDateTime.now());
-	    post.setDeleted(false);
-	    //最新のThreadIDを
-	    post.setThreadId(threadId); // ← 追加！
-	    return post;
-	}
 
-	
-	/*
-	 * DBに保存する
-	 */
-	public Post saveToDateBase(Post post) {
-	    // threadIdに紐づく最大contentIdを取得
-	    Long maxContentId = postrepo.findMaxContentIdByThreadId(post.getThreadId());
+    @Autowired
+    PostRepository postrepo;
 
-	    if (maxContentId == null) {
-	        maxContentId = 0L;
-	    }
-	    post.setContentId(maxContentId + 1L);
+    /**
+     * データベースに保存されている投稿の件数を取得する。
+     *
+     * @return 投稿件数
+     */
+    public int countDataBase() {
+        int count = (int) postrepo.count();
+        System.out.println(count);
+        return count;
+    }
 
-	    Post postresult = postrepo.save(post);
-	    return postresult;
-	}
+    /**
+     * 投稿フォームのデータをもとにPostエンティティを生成する。
+     * <p>
+     * 引数のthreadIdに紐づく投稿の中で最大のcontentIdを取得し、
+     * その値を元に新規contentIdを採番して設定する。
+     * 現在日時を作成日時としてセットする。
+     * </p>
+     *
+     * @param postForm 投稿フォームの入力データ
+     * @param threadId 紐づくスレッドID
+     * @return 生成されたPostエンティティ
+     */
+    public Post toEntity(ForumPostForm postForm, Long threadId) {
+        Post post = new Post();
 
-	
-	/*
-	 * DBをすべて取得する
-	 */
-	public List<Post> findAll(Long threadId){
-		return postrepo.findAllByThreadIdAndNotDeleted(threadId);
-	}
-    
+        // threadIdに紐づく最大contentIdを取得
+        Long maxContentId = postrepo.findMaxContentIdByThreadId(threadId);
 
-	/*
-	 * idに紐づくコメントを削除する
-	 */
-	public void delete(Long contentId,Long threadId){
-		Optional<Post> foundPost=postrepo.findById(contentId);
-		if(foundPost.isPresent()) {
-			postrepo.logicallyDeleteById(contentId,threadId);
-		}
-	}
-	
-	/*
-	 * content_idに紐づくPostテーブルのレコードを取得する
-	 */
-	
+        // contentIdの採番
+        Long generatedContentId = generateContentId(maxContentId);
+
+        post.setContentId(generatedContentId);
+        post.setAuthorName(postForm.getAuthorName());
+        post.setContent(postForm.getContent());
+        post.setCreatedAt(LocalDateTime.now());
+        post.setDeleted(false);
+        post.setThreadId(threadId);
+        return post;
+    }
+
+    /**
+     * 投稿エンティティをデータベースに保存する。
+     * <p>
+     * ここではネイティブSQLのupsert的な処理を実行する
+     * {@code postrepo.savePost(...)}を呼び出す。
+     * </p>
+     *
+     * @param post 保存対象のPostエンティティ
+     */
+    public void saveToDateBase(Post post) {
+        postrepo.savePost(
+            post.getContentId(),
+            post.getContent(),
+            post.getAuthorName(),
+            post.getThreadId()
+        );
+    }
+
+    /**
+     * 指定されたスレッドIDに紐づく、
+     * 削除されていない投稿一覧を取得する。
+     *
+     * @param threadId 取得対象のスレッドID
+     * @return 削除されていない投稿のリスト
+     */
+    public List<Post> findAll(Long threadId) {
+        return postrepo.findAllByThreadIdAndNotDeleted(threadId);
+    }
+
+    /**
+     * 指定したcontentIdとthreadIdに該当する投稿を論理削除する。
+     * <p>
+     * 投稿が存在する場合に論理削除を行い、
+     * 存在しない場合は処理を行わない。
+     * </p>
+     *
+     * @param contentId 投稿のcontentId
+     * @param threadId 投稿のthreadId
+     */
+    public void delete(Long contentId, Long threadId) {
+    	//Todo　IDの採番がよくないのかな
+        Optional<Post> foundPost = postrepo.findByIds(contentId,threadId);
+        if (foundPost.isPresent()) {
+            postrepo.logicallyDeleteById(contentId, threadId);
+        }
+    }
+
+    /**
+     * 新しいcontentIdを採番する。
+     * <p>
+     * 引数がnullの場合は1を返し、nullでなければ引数に1を足して返す。
+     * </p>
+     *
+     * @param contentId 現在の最大contentId
+     * @return 新しく採番されたcontentId
+     */
+    public Long generateContentId(Long contentId) {
+        if (contentId == null) {
+            contentId = 1L;
+        } else {
+            contentId += 1L;
+        }
+        return contentId;
+    }
 
 }

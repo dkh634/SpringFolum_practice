@@ -26,7 +26,7 @@ public class ServiceTest {
 	private PostRepository postRepositoryMock;
 	
     @InjectMocks
-    private ForumService service;
+    private PostService service;
     
 	
 	@Test
@@ -56,19 +56,20 @@ public class ServiceTest {
 		ForumPostForm postForm = new ForumPostForm();
 		postForm.setAuthorName("123456789abcdefghij");
 		postForm.setContent("asdfghjkl");
+		//スレッドIDを1に設定
+		Long threadId = 1L;
 		
 		//詰め替えるmethodを呼ぶ
-		Post resultPost = service.toEntity(postForm);
+		Post resultPost = service.toEntity(postForm,threadId);
 		
 		//想定値のEntity作成
 		Post expectedPost = new Post();
 		expectedPost.setAuthorName("123456789abcdefghij");
 		expectedPost.setContent("asdfghjkl");
 		expectedPost.setCreatedAt(LocalDateTime.now());
-		//Todo：あとで削除します
 		
 		//Todo：固定値から変動値に変更します
-		expectedPost.setTitle("test");
+		expectedPost.setThreadId(1L);
 
 		// 想定値と実際の値を比較する
         assertEquals(expectedPost.getAuthorName(), resultPost.getAuthorName());
