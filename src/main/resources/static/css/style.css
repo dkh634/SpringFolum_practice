@@ -68,3 +68,16 @@ th, td {
   margin-bottom: 12px; /* 下余白はお好みで */
 }
 
+.back-button {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #337ab7;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}
+
+
