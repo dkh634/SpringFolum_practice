@@ -1,9 +1,13 @@
 package jp.dkh634.springforum.repository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,39 +19,70 @@ import jp.dkh634.springforum.entity.Post;
 public class PostRepositoryTest {
 
     @Mock
-    private PostRepository postRepositoryMock;
+    private PostRepository postRepository;
 
-    @Test
-    public void testFindById() {
-        Post mockPost = new Post();
-        mockPost.setContentId(1L);
-        mockPost.setTitle("モックの投稿");
-        mockPost.setContent("これはモックデータです");
-        mockPost.setAuthorName("たけぞう");
+    private Post dummyPost;
 
-        when(postRepositoryMock.findById(1L)).thenReturn(Optional.of(mockPost));
+    private static final LocalDateTime FIXED_DATE_TIME = LocalDateTime.of(2024, 1, 1, 12, 0);
 
-        Optional<Post> result = postRepositoryMock.findById(1L);
-
-        assertTrue(result.isPresent());
-        assertEquals("モックの投稿", result.get().getTitle());
+    @BeforeEach
+    void setUp() {
+        dummyPost = new Post();
+        dummyPost.setContentId(1L);
+        dummyPost.setContent("テスト投稿");
+        dummyPost.setCreatedAt(FIXED_DATE_TIME);
+        dummyPost.setDeleted(false);
+        dummyPost.setThreadId(100L);
+        dummyPost.setAuthorName("たけぞう");
     }
 
     @Test
-    public void testSave() {
-        Post mockPost = new Post();
-        mockPost.setContentId(2L);
-        mockPost.setTitle("新規投稿");
-        mockPost.setContent("保存テスト");
-        mockPost.setAuthorName("たけぞう");
+    void logicallyDeleteByIdTest() {
+        doNothing().when(postRepository).logicallyDeleteById(1L, 100L);
 
-        when(postRepositoryMock.save(mockPost)).thenReturn(mockPost);
-        when(postRepositoryMock.findById(2L)).thenReturn(Optional.of(mockPost));
+        postRepository.logicallyDeleteById(1L, 100L);
 
-        postRepositoryMock.save(mockPost);
-        Optional<Post> result = postRepositoryMock.findById(2L);
+        verify(postRepository, times(1)).logicallyDeleteById(1L, 100L);
+    }
+
+    @Test
+    void findAllByThreadIdAndNotDeletedTest() {
+        when(postRepository.findAllByThreadIdAndNotDeleted(100L)).thenReturn(List.of(dummyPost));
+
+        List<Post> result = postRepository.findAllByThreadIdAndNotDeleted(100L);
+
+        assertEquals(1, result.size());
+        assertEquals("テスト投稿", result.get(0).getContent());
+        assertFalse(result.get(0).isDeleted());
+    }
+
+    @Test
+    void findMaxContentIdByThreadIdTest() {
+        when(postRepository.findMaxContentIdByThreadId(100L)).thenReturn(42L);
+
+        Long maxContentId = postRepository.findMaxContentIdByThreadId(100L);
+
+        assertEquals(42L, maxContentId);
+    }
+
+    @Test
+    void savePostTest() {
+        doNothing().when(postRepository).savePost(
+            1L, "テスト投稿", "たけぞう", 100L
+        );
+
+        postRepository.savePost(1L, "テスト投稿", "たけぞう", 100L);
+
+        verify(postRepository).savePost(1L, "テスト投稿", "たけぞう", 100L);
+    }
+
+    @Test
+    void findByIdsTest() {
+        when(postRepository.findByIds(1L, 100L)).thenReturn(Optional.of(dummyPost));
+
+        Optional<Post> result = postRepository.findByIds(1L, 100L);
 
         assertTrue(result.isPresent());
-        assertEquals("新規投稿", result.get().getTitle());
+        assertEquals("テスト投稿", result.get().getContent());
     }
 }
