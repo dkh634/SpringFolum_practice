@@ -22,4 +22,18 @@ public class ThreadService {
 		return threadrepo.findAllByOrderByCreatedAtAsc();
 	}
 	
+    /*
+     * threadIdを元にタイトルを取得する
+     */
+	public String findTitle(Long threadId) {
+		String title = "";
+		try {
+			title = threadrepo.findByTitle(threadId);
+		}catch(Exception e){
+			return title;
+		}
+		return title;
+	}
+
+	
 }

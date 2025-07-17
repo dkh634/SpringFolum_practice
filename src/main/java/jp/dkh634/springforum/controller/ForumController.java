@@ -55,6 +55,10 @@ public class ForumController {
 	    //投稿一覧をrequestscopeに保存する
 	    model.addAttribute("latestAllPosts", latestAllPosts); 
 	    session.setAttribute("threadId", threadId);
+	    
+	    //
+	    String title = threadservice.findTitle(threadId);
+	    model.addAttribute("title",title);
 	    return "/thread";
 	}
 	
