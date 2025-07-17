@@ -10,7 +10,7 @@
         <h1>掲示板</h1>
 		
         <div class="display">
-            <h2>タイトル</h2>
+            <h2 th:text="${title}">タイトル</h2>
             <hr>
 
             <div th:each="post : ${latestAllPosts}" >
