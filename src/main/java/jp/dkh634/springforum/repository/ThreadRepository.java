@@ -18,5 +18,5 @@ public interface ThreadRepository  extends JpaRepository<ForumThread, Long> {
      * タイトルを取得する
      */
     @Query(value = "SELECT title FROM thread WHERE thread_id = :threadId", nativeQuery = true)
-	String findByTitle(Long threadId);
+	String findTitle(Long threadId);
 }

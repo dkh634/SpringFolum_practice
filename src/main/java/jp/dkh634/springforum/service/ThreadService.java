@@ -28,7 +28,7 @@ public class ThreadService {
 	public String findTitle(Long threadId) {
 		String title = "";
 		try {
-			title = threadrepo.findByTitle(threadId);
+			title = threadrepo.findTitle(threadId);
 		}catch(Exception e){
 			return title;
 		}
