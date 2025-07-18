@@ -19,7 +19,7 @@ public class ThreadService {
 	 * スレッドの一覧を取得する
 	 */
 	public List<ForumThread> findAllThread(){
-		return threadrepo.findAllByDeletedFalseOrderByCreatedAtAsc();
+		return threadrepo.findAllByOrderByCreatedAtAsc();
 	}
 	
     /*

@@ -21,7 +21,7 @@ public interface ThreadRepository extends JpaRepository<ForumThread, Long> {
      *
      * @return 作成日時の古い順に並んだフォーラムスレッドのリスト
      */
-    List<ForumThread> findAllByDeletedFalseOrderByCreatedAtAsc();
+    List<ForumThread> findAllByOrderByCreatedAtAsc();
     
     /**
      * 指定したスレッドIDに対応するスレッドのタイトルを取得する。
