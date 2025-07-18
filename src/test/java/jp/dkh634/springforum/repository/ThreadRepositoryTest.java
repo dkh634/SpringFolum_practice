@@ -45,4 +45,6 @@ public class ThreadRepositoryTest {
         // Assert
         assertEquals("テストタイトル1", title);
     }
+    
+//    Todo findAllByDeletedFalseOrderByCreatedAtAscのテストメソッドの作成
 }
