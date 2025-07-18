@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/springtest
+    username: postgres
+    password: daisuke634
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # テスト時は自動でテーブル作成→削除
+    show-sql: true
+  sql:
+    init:
+      mode: always
