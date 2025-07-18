@@ -27,14 +27,10 @@ public class ThreadRepositoryTest {
 
     @BeforeEach
     void resetSequence() {
-        // ① 現在の最大IDを取得
-        Long maxId = jdbcTemplate.queryForObject("SELECT COALESCE(MAX(thread_id), 0) FROM thread", Long.class);
-
-        // ② シーケンス値を最大IDにセット
-        // PostgreSQL のシーケンス名は 'thread_thread_id_seq' なので調整してください
-        jdbcTemplate.execute("SELECT setval('thread_thread_id_seq', " + maxId + ")");
+        Long maxId = jdbcTemplate.queryForObject("SELECT COALESCE(MAX(thread_id), 1) FROM thread", Long.class);
+        jdbcTemplate.execute("SELECT setval('thread_thread_id_seq', " + maxId + ", true)");
     }
-    
+
     @Test
     void タイトルが取得できる() {
         // Arrange（データ準備）
