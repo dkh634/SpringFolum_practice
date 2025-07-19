@@ -30,22 +30,22 @@ public class ThreadRepositoryTest {
     private ForumThread thread2;
     
     @BeforeEach
-    void resetSequence() {
-        Long maxId = jdbcTemplate.queryForObject("SELECT COALESCE(MAX(thread_id), 1) FROM thread", Long.class);
-        jdbcTemplate.execute("SELECT setval('thread_thread_id_seq', " + maxId + ", true)");
-        
-    	//データ準備
-    	thread1 = new ForumThread();
-    	thread1.setTitle("テストタイトル1");
-    	thread1.setCreatedAt(LocalDateTime.of(2025,1,1,12,0));
-    	thread1 = threadRepository.save(thread1);
-    	
-    	//データ準備
-    	thread2 = new ForumThread();
-    	thread2.setTitle("テストタイトル2");
-    	thread2.setCreatedAt(LocalDateTime.of(2025,1,2,13,0));
-    	thread2 = threadRepository.save(thread2);
+    void resetDatabase() {
+        // テーブルを初期化（TRUNCATEで全データ削除 + IDを1からにリセット）
+        jdbcTemplate.execute("TRUNCATE thread RESTART IDENTITY CASCADE");
+
+        // 必要なテストデータを挿入
+        thread1 = new ForumThread();
+        thread1.setTitle("テストタイトル1");
+        thread1.setCreatedAt(LocalDateTime.of(2025, 1, 1, 12, 0));
+        thread1 = threadRepository.save(thread1);
+
+        thread2 = new ForumThread();
+        thread2.setTitle("テストタイトル2");
+        thread2.setCreatedAt(LocalDateTime.of(2025, 1, 2, 13, 0));
+        thread2 = threadRepository.save(thread2);
     }
+
 
     @Test
     void threadIdに紐づくタイトルが取得できる() {
@@ -59,12 +59,15 @@ public class ThreadRepositoryTest {
     
 
     @Test
-    void タイトル一覧を取得できる() {
-    	 // findAllByOrderByCreatedAtAscを実行
-    	List<ForumThread> titleList = threadRepository.findAllByOrderByCreatedAtAsc();
+    void Threadの情報を一覧で取得できる() {
+    	 // findAllByOrderByCreatedAtAsc を実行
+    	List<ForumThread> threadList = threadRepository.findAllByOrderByCreatedAtAsc();
 
-        // Assert
-        assertEquals("テストタイトル1", titleList.get(0).getTitle());
-        assertEquals("テストタイトル2", titleList.get(1).getTitle());
+        // 想定結果と比較する
+    	assertEquals(2, threadList.size());
+        assertEquals("テストタイトル1", threadList.get(0).getTitle());
+        assertEquals(1,threadList.get(0).getThreadId());
+        assertEquals("テストタイトル2", threadList.get(1).getTitle());
+        assertEquals(2,threadList.get(1).getThreadId());
     }
 }
