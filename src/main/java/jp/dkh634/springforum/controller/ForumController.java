@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import jp.dkh634.springforum.entity.ForumThread;
 import jp.dkh634.springforum.entity.Post;
 import jp.dkh634.springforum.form.ForumPostForm;
@@ -49,16 +52,21 @@ public class ForumController {
 	@GetMapping("/api/thread/{id}")
 	public String displayHome(Model model,@PathVariable("id") Long threadId,HttpSession session) {
 		
-		//スレッドIDに紐づく投稿一覧を取得する
+		// スレッドIDに紐づく投稿一覧を取得する
 	    List<Post> latestAllPosts = postservice.findAll(threadId);
 	    
-	    //投稿一覧をrequestscopeに保存する
+	    // 投稿一覧をrequestscopeに保存する
 	    model.addAttribute("latestAllPosts", latestAllPosts); 
 	    session.setAttribute("threadId", threadId);
 	    
-	    //
+	    // タイトルを取得する
 	    String title = threadservice.findTitle(threadId);
 	    model.addAttribute("title",title);
+	    
+	    // TodoFlashスコープに formが存在しない場合だけ新しく追加
+	    if (!model.containsAttribute("forumPostForm")) {
+	        model.addAttribute("forumPostForm", new ForumPostForm());
+	    }
 	    return "/thread";
 	}
 	
@@ -71,18 +79,38 @@ public class ForumController {
      * @throws IllegalStateException セッションにthreadIdが存在しない場合
      */
 	@PostMapping("/api/post")
-	public String reservePost(@ModelAttribute ForumPostForm postForm, HttpSession session) {
+	public String reservePost(@Valid @ModelAttribute ForumPostForm postForm, 
+            BindingResult bindingResult,
+            HttpSession session, 
+            RedirectAttributes redirectAttributes,
+            Model model) {
+		// セッションからthreadIdを取得する
 	    Long threadId = (Long) session.getAttribute("threadId");
 	    if (threadId == null) {
 	        throw new IllegalStateException("threadId is missing in session");
 	    }
-
-	    //FormをEntityに変換する
-	    Post post = postservice.toEntity(postForm, threadId);
 	    
-	    //投稿内容をDBに保存する
-	    postservice.saveToDateBase(post);
+	 // バリデーションエラーがある場合
+	    if (bindingResult.hasErrors()) {
+	        // 投稿一覧を再取得
+	        List<Post> latestAllPosts = postservice.findAll(threadId);
+	        model.addAttribute("latestAllPosts", latestAllPosts);
+	        
+//	        // タイトルを再取得
+//	        String title = threadservice.findTitle(threadId);
+//	        model.addAttribute("title", title);
+	        
+	        // エラーのあるフォームをモデルに追加
+	        // エラーメッセージとフォームデータをフラッシュスコープに格納
+	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.forumPostForm", bindingResult);
+	        redirectAttributes.addFlashAttribute("forumPostForm", postForm);
+	        
+	        // thread.htmlに直接遷移（リダイレクトではない）
+	        return "redirect:/api/thread/" + threadId;
+	    }
 
+	    Post post = postservice.toEntity(postForm, threadId);
+	    postservice.saveToDateBase(post);
 	    return "redirect:/api/thread/" + threadId;
 	}
 	
