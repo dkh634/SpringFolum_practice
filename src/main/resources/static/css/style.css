@@ -80,4 +80,21 @@ th, td {
     text-decoration: underline;
 }
 
+/* エラーメッセージのスタイル */
+.error-message {
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.error-text {
+    display: block;
+}
+
+/* エラーがある入力フィールドのスタイル */
+input.error, textarea.error {
+    border-color: #d32f2f;
+    background-color: #ffebee;
+}
 
