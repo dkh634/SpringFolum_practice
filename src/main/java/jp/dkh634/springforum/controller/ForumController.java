@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import jp.dkh634.springforum.entity.ForumThread;
 import jp.dkh634.springforum.entity.Post;
 import jp.dkh634.springforum.form.ForumPostForm;
+import jp.dkh634.springforum.form.ThreadPostForm;
 import jp.dkh634.springforum.service.PostService;
 import jp.dkh634.springforum.service.ThreadService;
 
@@ -39,6 +40,19 @@ public class ForumController {
 		 List<ForumThread> latestAllThread = threadservice.findAllThread();
 		 model.addAttribute("latestAllThread", latestAllThread); 
 		return "/forum";
+	}
+	
+	@PostMapping("/api/forum")
+	public String displayForum(Model model,@ModelAttribute ThreadPostForm threadpostForm){
+		
+		//FormからEntityクラスへ詰め替える
+		ForumThread forumThread = threadservice.toEntity(threadpostForm);
+
+		//投稿内容を保存する
+		threadservice.saveToDateBase(forumThread);
+		
+
+		return "redirect:/api/forum";
 	}
 	
     /**
