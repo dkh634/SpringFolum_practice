@@ -24,10 +24,14 @@
         </div>
         
         	<div>
-				<form method="post" action="/api/forum">
+				<form method="post" action="/api/forum"  th:object="${threadpostForm}">
 					<!-- タイトル  -->
 		            <label for="title">新規スレッド名</label><br />
-		            <input type="text" id="title" name="title" /><br />
+		            <input type="text" id="title" name="title"  th:field="*{title}" /><br />
+		            
+		            <div th:if="${#fields.hasErrors('title')}" class="error-message">
+		                <span th:errors="*{title}" class="error-text"></span>
+		            </div>
 		            <button type="submit">投稿</button>
 		        </form>
 			</div>

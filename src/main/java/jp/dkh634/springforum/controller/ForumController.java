@@ -39,12 +39,39 @@ public class ForumController {
 	public String displayForum(Model model){
 		 List<ForumThread> latestAllThread = threadservice.findAllThread();
 		 model.addAttribute("latestAllThread", latestAllThread); 
-		return "/forum";
+		 
+	    // TodoFlashスコープに formが存在しない場合だけ新しく追加
+	    if (!model.containsAttribute("threadpostForm")) {
+	        model.addAttribute("threadpostForm", new ThreadPostForm());
+	    }
+		return "forum";
 	}
 	
+	/**
+	 * スレッドを新規作成すると、タイトル情報をFormに倍ディングする
+	 * 
+	 * @param model
+	 * @param threadpostForm
+	 * @return
+	 */
 	@PostMapping("/api/forum")
-	public String displayForum(Model model,@ModelAttribute ThreadPostForm threadpostForm){
+	public String displayForum(Model model,
+			@Valid @ModelAttribute ThreadPostForm threadpostForm,
+			BindingResult bindingResult,
+			RedirectAttributes redirectAttributes){
 		
+		 // バリデーションエラーがある場合
+	    if (bindingResult.hasErrors()) {
+	        
+	        // エラーのあるフォームをモデルに追加
+	        // エラーメッセージとフォームデータをフラッシュスコープに格納
+	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.threadpostForm", bindingResult);
+	        redirectAttributes.addFlashAttribute("threadpostForm", threadpostForm);
+	        
+	        // thread.htmlに直接遷移
+	        return "redirect:/api/forum";
+	    }
+	    
 		//FormからEntityクラスへ詰め替える
 		ForumThread forumThread = threadservice.toEntity(threadpostForm);
 
@@ -110,16 +137,13 @@ public class ForumController {
 	        List<Post> latestAllPosts = postservice.findAll(threadId);
 	        model.addAttribute("latestAllPosts", latestAllPosts);
 	        
-//	        // タイトルを再取得
-//	        String title = threadservice.findTitle(threadId);
-//	        model.addAttribute("title", title);
 	        
 	        // エラーのあるフォームをモデルに追加
 	        // エラーメッセージとフォームデータをフラッシュスコープに格納
 	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.forumPostForm", bindingResult);
 	        redirectAttributes.addFlashAttribute("forumPostForm", postForm);
 	        
-	        // thread.htmlに直接遷移（リダイレクトではない）
+	        // thread.htmlに直接遷移
 	        return "redirect:/api/thread/" + threadId;
 	    }
 
