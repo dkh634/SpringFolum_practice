@@ -24,7 +24,8 @@ public interface ThreadRepository extends JpaRepository<ForumThread, Long> {
      *
      * @return 作成日時の古い順に並んだフォーラムスレッドのリスト
      */
-    List<ForumThread> findAllByOrderByCreatedAtAsc();
+	@Query(value = "SELECT * FROM thread WHERE deleted = 'false'", nativeQuery = true)
+    List<ForumThread> findAllList();
     
     /**
      * 指定したスレッドIDに対応するスレッドのタイトルを取得する。
@@ -47,12 +48,13 @@ public interface ThreadRepository extends JpaRepository<ForumThread, Long> {
     @Modifying
     @Transactional
     @Query(value = """
-        INSERT INTO thread (thread_id, title, created_at)
-        VALUES (:threadId, :title, CURRENT_TIMESTAMP)
+        INSERT INTO thread (thread_id, title, created_at,deleted)
+        VALUES (:threadId, :title, CURRENT_TIMESTAMP, :deleted)
     """, nativeQuery = true)
     void saveForum(
         @Param("threadId") Long threadId,
-        @Param("title") String title
+        @Param("title") String title,
+        @Param("deleted") boolean deleted
     );
 
 }

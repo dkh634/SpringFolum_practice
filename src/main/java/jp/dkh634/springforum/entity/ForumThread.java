@@ -15,7 +15,8 @@ import lombok.Data;
 public class ForumThread  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Long threadId;
-	public String title;
-	public LocalDateTime createdAt;
+	private Long threadId;
+	private String title;
+	private LocalDateTime createdAt;
+	private boolean deleted;
 }

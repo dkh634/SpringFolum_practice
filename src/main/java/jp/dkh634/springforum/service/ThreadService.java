@@ -21,7 +21,7 @@ public class ThreadService {
 	 * スレッドの一覧を取得する
 	 */
 	public List<ForumThread> findAllThread(){
-		return threadrepo.findAllByOrderByCreatedAtAsc();
+		return threadrepo.findAllList();
 	}
 	
     /*
@@ -61,6 +61,9 @@ public class ThreadService {
         //threadIdを設定する
         forumThread.setThreadId(generatedThreadId);
         
+        //deletedを設定する(論理削除フラグ)
+        forumThread.setDeleted(false);
+        
         return forumThread;
     }
     
@@ -68,15 +71,16 @@ public class ThreadService {
      * 投稿エンティティをデータベースに保存する。
      * <p>
      * ここではネイティブSQLのupsert的な処理を実行する
-     * {@code postrepo.savePost(...)}を呼び出す。
+     * {@code threadrepo.saveForum(...)}を呼び出す。
      * </p>
      *
-     * @param post 保存対象のPostエンティティ
+     * @param forumThread 保存対象のPostエンティティ
      */
     public void saveToDateBase(ForumThread forumThread) {
     	threadrepo.saveForum(
     		forumThread.getThreadId(),
-    		forumThread.getTitle()
+    		forumThread.getTitle(),
+    		forumThread.isDeleted()
         );
     }
     
