@@ -48,7 +48,7 @@ public class ForumController {
 	}
 	
 	/**
-	 * スレッドを新規作成すると、タイトル情報をFormに倍ディングする
+	 * スレッドを新規作成すると、タイトル情報をFormにバインディングする
 	 * 
 	 * @param model
 	 * @param threadpostForm
