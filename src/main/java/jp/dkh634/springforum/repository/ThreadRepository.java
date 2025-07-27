@@ -24,7 +24,7 @@ public interface ThreadRepository extends JpaRepository<ForumThread, Long> {
      *
      * @return 作成日時の古い順に並んだフォーラムスレッドのリスト
      */
-	@Query(value = "SELECT * FROM thread WHERE deleted = 'false'", nativeQuery = true)
+	@Query(value = "SELECT * FROM thread WHERE deleted = false", nativeQuery = true)
     List<ForumThread> findAllList();
     
     /**
