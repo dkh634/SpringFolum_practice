@@ -171,7 +171,7 @@ public class ThreadRepositoryTest {
         
         int maxThreadId = threadRepository.findMaxThreadId();
         
-        assertEquals(3,maxThreadId);
+        assertEquals(3, maxThreadId);
      
     }
 }
