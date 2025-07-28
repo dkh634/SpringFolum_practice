@@ -37,9 +37,9 @@ public interface ThreadRepository extends JpaRepository<ForumThread, Long> {
     String findTitle(Long threadId);
     
     /**
-     * 論理削除されていない最大のThreadIdを取得する。
+     * 最大のThreadIdを取得する。
+     * ThreadServiceクラスのgenerateThreadIdメソッドで手動採番するときに使用する。
      *
-     * @param threadId スレッドのID
      * @return 該当スレッドのタイトル文字列
      */
     @Query(value = "SELECT MAX(thread_id) FROM thread", nativeQuery = true)
