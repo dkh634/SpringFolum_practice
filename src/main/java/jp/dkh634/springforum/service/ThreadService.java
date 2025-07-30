@@ -28,7 +28,7 @@ public class ThreadService {
      * threadIdを元にタイトルを取得する
      */
 	public String findTitle(Long threadId) {
-		String title = "";
+		String title = "threadIdを取得できませんでした";
 		try {
 			title = threadrepo.findTitle(threadId);
 		}catch(Exception e){
