@@ -5,31 +5,60 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import jp.dkh634.springforum.entity.ForumThread;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("test") // application-test.yml を使う（後述）
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) 
+@Testcontainers
+@ActiveProfiles("test")
+@TestPropertySource(properties = "spring.sql.init.mode=never")
 public class ThreadRepositoryTest {
 
+    // PostgreSQLコンテナ定義（testcontainerで自動起動）
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17")
+            .withDatabaseName("forum_test")
+            .withUsername("forumuser")
+            .withPassword("forumpass");
+
+    // SpringのDataSource設定を上書き
+    @DynamicPropertySource
+    static void registerPgProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+	
     @Autowired
     private ThreadRepository threadRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @BeforeEach
-    void resetSequence() {
-        Long maxId = jdbcTemplate.queryForObject("SELECT COALESCE(MAX(thread_id), 1) FROM thread", Long.class);
-        jdbcTemplate.execute("SELECT setval('thread_thread_id_seq', " + maxId + ", true)");
+    @BeforeAll
+    static void createTable(@Autowired JdbcTemplate jdbcTemplate) {
+        jdbcTemplate.execute("""
+            CREATE TABLE IF NOT EXISTS thread (
+                thread_id BIGSERIAL PRIMARY KEY,
+                title VARCHAR(255),
+                created_at TIMESTAMP,
+                deleted BOOLEAN
+            )
+        """);
     }
 
     @Test

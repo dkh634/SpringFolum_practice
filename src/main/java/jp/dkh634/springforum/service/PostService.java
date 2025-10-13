@@ -13,10 +13,10 @@ import jp.dkh634.springforum.repository.PostRepository;
 
 /**
  * 投稿（Post）に関する業務ロジックを扱うサービスクラス。
- * <p>
+ * 
  * ForumPostFormからPostエンティティへの変換や、
  * データベースへの保存、取得、論理削除などを提供する。
- * </p>
+ * 
  */
 @Service
 public class PostService {
@@ -37,11 +37,11 @@ public class PostService {
 
     /**
      * 投稿フォームのデータをもとにPostエンティティを生成する。
-     * <p>
+     * 
      * 引数のthreadIdに紐づく投稿の中で最大のcontentIdを取得し、
      * その値を元に新規contentIdを採番して設定する。
      * 現在日時を作成日時としてセットする。
-     * </p>
+     * 
      *
      * @param postForm 投稿フォームの入力データ
      * @param threadId 紐づくスレッドID
@@ -67,10 +67,10 @@ public class PostService {
 
     /**
      * 投稿エンティティをデータベースに保存する。
-     * <p>
+     * 
      * ここではネイティブSQLのupsert的な処理を実行する
      * {@code postrepo.savePost(...)}を呼び出す。
-     * </p>
+     * 
      *
      * @param post 保存対象のPostエンティティ
      */
@@ -96,10 +96,10 @@ public class PostService {
 
     /**
      * 指定したcontentIdとthreadIdに該当する投稿を論理削除する。
-     * <p>
+     * 
      * 投稿が存在する場合に論理削除を行い、
      * 存在しない場合は処理を行わない。
-     * </p>
+     * 
      *
      * @param contentId 投稿のcontentId
      * @param threadId 投稿のthreadId
@@ -114,9 +114,9 @@ public class PostService {
 
     /**
      * 新しいcontentIdを採番する。
-     * <p>
+     * 
      * 引数がnullの場合は1を返し、nullでなければ引数に1を足して返す。
-     * </p>
+     * 
      *
      * @param contentId 現在の最大contentId
      * @return 新しく採番されたcontentId

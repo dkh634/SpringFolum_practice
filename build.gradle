@@ -37,9 +37,15 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+	
+	//テスト関連
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+	// Testcontainers（PostgreSQL用 + JUnit 5対応）
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.3'
+    testImplementation 'org.testcontainers:postgresql:1.20.3'
 }
 
 tasks.named('test') {
@@ -56,4 +62,8 @@ tasks.named('asciidoctor') {
 test {
     useJUnitPlatform()
     exclude '**/ForumApplicationTests.class'
+}
+
+bootRun {
+    jvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 }

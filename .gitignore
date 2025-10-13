@@ -38,3 +38,6 @@ out/
 
 # 全ての application-*.properties を無視
 src/main/resources/application*.properties
+
+### ログファイルを無視 ###
+/data/
