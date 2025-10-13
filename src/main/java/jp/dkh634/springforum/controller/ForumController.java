@@ -146,9 +146,18 @@ public class ForumController {
 	        // thread.htmlに直接遷移
 	        return "redirect:/api/thread/" + threadId;
 	    }
-
-	    Post post = postservice.toEntity(postForm, threadId);
-	    postservice.saveToDateBase(post);
+	    try {
+	    	if(threadId== 0) {
+	    		throw new NullPointerException();
+	    		
+	    	}
+    		Post post = postservice.toEntity(postForm, threadId);
+	    	postservice.saveToDateBase(post);
+	    	
+	    }catch (NullPointerException e) {
+	    	e.getMessage();
+	    }
+	    
 	    return "redirect:/api/thread/" + threadId;
 	}
 	

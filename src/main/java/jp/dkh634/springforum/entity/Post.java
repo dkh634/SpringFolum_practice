@@ -12,7 +12,7 @@ import lombok.Data;
 @Table(name = "post")
 public class Post {
 
-    @Id
+	@Id
     private Long contentId;
     private String content;
     private String authorName;
