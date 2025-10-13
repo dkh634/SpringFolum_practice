@@ -33,7 +33,7 @@
 | 項目          | 技術                              |
 |---------------|-----------------------------------|
 | フレームワーク | Spring Boot                      |
-| テスト        | JUnit, Mockito                  |
+| テスト        | JUnit, Mockito,testcontainer      |
 | フロントエンド | jQuery, HTML, CSS               |
 | データベース  | PostgreSQL                      |
 | CI/CD        | GitHub Actions                  |
