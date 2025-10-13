@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // threadIdで最大contentIdを取得する（存在しなければnull）
     @Query(value = "SELECT MAX(content_id) FROM post WHERE thread_id = :threadId", nativeQuery = true)
-    Long findMaxContentIdByThreadId(@Param("threadId") Long long1);
+    Long findMaxContentIdByThreadId(@Param("threadId") Long threadId);
     
     
     @Modifying

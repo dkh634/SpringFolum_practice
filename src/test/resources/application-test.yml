@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/forum_test
+    username: forumuser
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  sql:
+    init:
+      mode: always                  # ← schema.sql を読み込ませる
+      schema-locations: classpath:test_schema.sql
+      data-locations: classpath:test_data.sql  # 空ファイルでも良い
