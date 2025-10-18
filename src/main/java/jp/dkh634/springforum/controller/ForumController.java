@@ -30,12 +30,12 @@ public class ForumController {
 	private ThreadService threadservice;
 	
     /**
-     * 掲示板のスレッド一覧を取得し、掲示板一覧画面(forum.html)に遷移します。
+     * 掲示板のスレッド一覧を取得し、掲示板一覧画面(thread.html)に遷移します。
      *
      * @param model モデルにスレッド一覧を追加します
-     * @return 掲示板一覧画面(forum.html）へ遷移
+     * @return 掲示板一覧画面(thread.html）へ遷移
      */
-	@GetMapping("/api/forum")
+	@GetMapping("/api/thread")
 	public String displayForum(Model model){
 		 List<ForumThread> latestAllThread = threadservice.findAllThread();
 		 model.addAttribute("latestAllThread", latestAllThread); 
@@ -44,7 +44,9 @@ public class ForumController {
 	    if (!model.containsAttribute("threadpostForm")) {
 	        model.addAttribute("threadpostForm", new ThreadPostForm());
 	    }
-		return "forum";
+	    
+	    // thread.htmlへ遷移する
+		return "thread";
 	}
 	
 	/**
@@ -54,9 +56,9 @@ public class ForumController {
 	 * @param threadpostForm
 	 * @return
 	 */
-	@PostMapping("/api/forum")
+	@PostMapping("/api/thread")
 	public String displayForum(Model model,
-			@Valid @ModelAttribute ThreadPostForm threadpostForm,
+			@Valid @ModelAttribute ThreadPostForm threadpostForm,// Todo Form名はあとで見直します
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes){
 		
@@ -69,28 +71,27 @@ public class ForumController {
 	        redirectAttributes.addFlashAttribute("threadpostForm", threadpostForm);
 	        
 	        // thread.htmlに直接遷移
-	        return "redirect:/api/forum";
+	        return "redirect:/api/thread";
 	    }
 	    
-		//FormからEntityクラスへ詰め替える
+		// FormからEntityクラスへ詰め替える
 		ForumThread forumThread = threadservice.toEntity(threadpostForm);
 
-		//投稿内容を保存する
+		// 新規スレッドの内容を保存する
 		threadservice.saveToDateBase(forumThread);
-		
 
-		return "redirect:/api/forum";
+		return "redirect:/api/thread";
 	}
 	
     /**
-     * スレッドIDに紐づく投稿一覧を取得し、掲示板画面（thread.html）に遷移します。
+     * スレッドIDに紐づく投稿一覧を取得し、掲示板画面（post.html）に遷移します。
      *
      * @param model コメント一覧を追加
      * @param threadId スレッドID
      * @param session スレッドIDを保持
-     * @return 掲示板画面（thread.html）へ遷移
+     * @return 掲示板画面（post.html）へ遷移
      */
-	@GetMapping("/api/thread/{id}")
+	@GetMapping("/api/post/{id}")
 	public String displayHome(Model model,@PathVariable("id") Long threadId,HttpSession session) {
 		
 		// スレッドIDに紐づく投稿一覧を取得する
@@ -108,7 +109,7 @@ public class ForumController {
 	    if (!model.containsAttribute("forumPostForm")) {
 	        model.addAttribute("forumPostForm", new ForumPostForm());
 	    }
-	    return "/thread";
+	    return "/post";
 	}
 	
     /**
@@ -144,7 +145,7 @@ public class ForumController {
 	        redirectAttributes.addFlashAttribute("forumPostForm", postForm);
 	        
 	        // thread.htmlに直接遷移
-	        return "redirect:/api/thread/" + threadId;
+	        return "redirect:/api/post/" + threadId;
 	    }
 	    try {
 	    	if(threadId== 0) {
@@ -158,7 +159,7 @@ public class ForumController {
 	    	e.getMessage();
 	    }
 	    
-	    return "redirect:/api/thread/" + threadId;
+	    return "redirect:/api/post/" + threadId;
 	}
 	
     /**
@@ -176,7 +177,8 @@ public class ForumController {
 	        throw new IllegalStateException("スレッドIDが見つかりません");
 	    }
 	    postservice.delete(postId,threadId);
-	    return "redirect:/api/thread/" + threadId;
+
+	    return "redirect:/api/post/" + threadId;
 	}
 
 

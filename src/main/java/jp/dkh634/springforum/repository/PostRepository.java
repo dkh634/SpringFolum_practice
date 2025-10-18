@@ -45,7 +45,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 論理削除されておらず、引数で渡したthreadIdに紐づくレコードを取得する
     @Query(value = "SELECT * FROM post WHERE deleted = false AND thread_id = :threadId and content_id = :contentId", nativeQuery = true)
     Optional<Post> findByIds(@Param("contentId") Long contentId,@Param("threadId") Long threadId );
-
-    
 }
 

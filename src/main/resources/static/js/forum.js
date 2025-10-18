@@ -1,5 +1,3 @@
-
-
 function selectThread(threadId){
-	window.location.href='/api/thread/'+threadId;
+	window.location.href='/api/post/'+threadId;
 }
