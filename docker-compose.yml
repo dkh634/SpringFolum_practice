@@ -31,6 +31,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./forum_schema.sql:/docker-entrypoint-initdb.d/forum_schema.sql:ro
+      - ./users_data.sql:/docker-entrypoint-initdb.d/users_data.sql:ro
 
 volumes:
   pgdata:
