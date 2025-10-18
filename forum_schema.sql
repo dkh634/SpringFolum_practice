@@ -25,3 +25,24 @@ CREATE TABLE IF NOT EXISTS public.post (
 -- 権限
 ALTER TABLE IF EXISTS public.thread OWNER TO forumuser;
 ALTER TABLE IF EXISTS public.post OWNER TO forumuser;
+
+-- users テーブル
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,  -- BCryptでハッシュ化
+    enabled BOOLEAN DEFAULT true
+);
+
+-- roles テーブル
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL  -- 例: 'ROLE_ADMIN', 'ROLE_USER'
+);
+
+-- users-roles テーブル
+CREATE TABLE user_roles (
+    user_id INT REFERENCES users(id),
+    role_id INT REFERENCES roles(id),
+    PRIMARY KEY (user_id, role_id)
+);
