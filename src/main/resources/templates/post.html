@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>掲示板アプリ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div class="board-container">
+        <h1>掲示板</h1>
+        
+        <div class="display">
+            <h2 th:text="${title}">タイトル</h2>
+            <hr>
+
+            <div th:each="post : ${latestAllPosts}" >
+                <div class="post-container">
+                  <div class="post-header">
+                    <span class="post-date" th:text="${post.contentId+' : '+#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}">日時</span>
+                    <span class="deleteConfirmButton" th:onclick="|deletePost(${post.contentId})|">×</span>
+                  </div>
+                  <p class="post-content" th:text="${post.content}">コメント</p>
+                  <p th:onclick="|replyPost(${post.contentId})|" id="reply">↩</p>
+                  <hr>
+                </div>
+            </div>
+        </div>
+
+        <!-- フォーム部分 -->
+        <form method="post" action="/api/post" th:object="${forumPostForm}">
+            
+            <label for="authorName">名前</label><br />
+            <input type="text" id="authorName" name="authorName" th:field="*{authorName}" />
+            <!-- 名前のエラーメッセージ表示 -->
+            <div th:if="${#fields.hasErrors('authorName')}" class="error-message">
+                <span th:errors="*{authorName}" class="error-text"></span>
+            </div>
+            <br />
+
+            <label for="content">メッセージ</label><br />
+            <textarea id="content" name="content" rows="4" th:field="*{content}"></textarea>
+            <!-- 内容のエラーメッセージ表示 -->
+            <div th:if="${#fields.hasErrors('content')}" class="error-message">
+                <span th:errors="*{content}" class="error-text"></span>
+            </div>
+            <br />
+            
+            <p id="replyToId" style="display: none;">返信先ID : </p>
+
+            <button type="submit">投稿</button>
+            <a th:href="@{/api/thread}" class="back-button">← スレッド一覧に戻る</a>
+        </form>
+    </div>
+    
+     <script th:src="@{/js/home.js}"></script>
+</body>
+</html>

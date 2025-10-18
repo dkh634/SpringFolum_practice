@@ -56,5 +56,4 @@ public interface ThreadRepository extends JpaRepository<ForumThread, Long> {
         @Param("title") String title,
         @Param("deleted") boolean deleted
     );
-
 }
