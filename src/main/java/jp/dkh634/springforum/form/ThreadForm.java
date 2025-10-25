@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class ThreadPostForm {
+public class ThreadForm {
 	
-	@NotBlank(message = "{threadPostForm.title.notNull}")
-	@Size(max = 20, message = "{threadPostForm.title.size}")
+	@NotBlank(message = "{threadForm.title.notNull}")
+	@Size(max = 20, message = "{threadForm.title.size}")
 	private String title;
 }

@@ -12,11 +12,23 @@
     </div>
 
     <!-- フォーム部分 -->
-    <form th:action="@{/api/login}" method="post">
+    <form th:action="@{/api/login}" th:object="${loginForm}" method="post">
 		<label for="username">ユーザー名：</label>
-	    <input type="text" name="username"></br>
+	    <input type="text" th:field="*{username}" id="username"></br>
+	    <!-- 内容のエラーメッセージ表示 -->
+        <div th:if="${#fields.hasErrors('username')}" class="error-message">
+            <span th:errors="*{username}" class="error-text"></span>
+        </div>
+        
 	    <label for="password">パスワード：</label>
-	    <input type="password"  name="password">
+	    <input type="password" th:field="*{password}" id="password">
+	    <div th:if="${#fields.hasErrors('password')}" class="error-message">
+	        <span th:errors="*{password}" class="error-text"></span>
+	    </div>
+	    
+	     <!-- 認証エラー全体メッセージ -->
+	    <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-message"></div>
+
 	    <br/>
 	    <br/>
 	    <input type="submit" value="ログイン">

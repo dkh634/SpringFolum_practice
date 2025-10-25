@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import jp.dkh634.springforum.entity.ForumThread;
-import jp.dkh634.springforum.form.ThreadPostForm;
+import jp.dkh634.springforum.form.ThreadForm;
 import jp.dkh634.springforum.repository.ThreadRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,7 +71,7 @@ public class ThreadServiceTest {
         // Arrange: モックの挙動と入力データを用意
         when(threadRepositoryMock.findMaxThreadId()).thenReturn(5); // 次は6
 
-        ThreadPostForm form = new ThreadPostForm();
+        ThreadForm form = new ThreadForm();
         form.setTitle("テストタイトル");
 
         // Act: メソッド呼び出し

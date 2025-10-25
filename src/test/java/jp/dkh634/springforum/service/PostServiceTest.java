@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import jp.dkh634.springforum.entity.Post;
-import jp.dkh634.springforum.form.ForumPostForm;
+import jp.dkh634.springforum.form.PostForm;
 import jp.dkh634.springforum.repository.PostRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,7 +55,7 @@ public class PostServiceTest {
 
     @Test
     public void toEntity_変換データが存在する() {
-        ForumPostForm postForm = new ForumPostForm();
+        PostForm postForm = new PostForm();
         postForm.setAuthorName("123456789abcdefghij");
         postForm.setContent("asdfghjkl");
         Long threadId = 1L;

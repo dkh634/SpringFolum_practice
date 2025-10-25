@@ -5,12 +5,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class ForumPostForm {
+public class PostForm {
     
-	@Size(max = 20, message = "{forumPostForm.authorName.size}")
+	@Size(max = 20, message = "{postForm.authorName.size}")
     private String authorName;
 	
-	 @NotBlank(message = "{forumPostForm.content.notNull}")
-	 @Size(min = 1, max = 200, message = "{forumPostForm.content.size}")
+	 @NotBlank(message = "{postForm.content.notNull}")
+	 @Size(min = 1, max = 200, message = "{postForm.content.size}")
     private String content;
 }
