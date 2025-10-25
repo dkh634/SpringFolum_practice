@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.dkh634.springforum.entity.ForumThread;
-import jp.dkh634.springforum.form.ThreadPostForm;
+import jp.dkh634.springforum.form.ThreadForm;
 import jp.dkh634.springforum.repository.ThreadRepository;
 
 @Service
@@ -43,7 +43,7 @@ public class ThreadService {
      * @param postForm 投稿フォームの入力データ
      * @return 生成されたPostエンティティ
      */
-    public ForumThread toEntity(ThreadPostForm threadPostForm) {
+    public ForumThread toEntity(ThreadForm threadForm) {
         ForumThread forumThread = new ForumThread();
         
         Integer maxThreadId = threadrepo.findMaxThreadId();
@@ -53,7 +53,7 @@ public class ThreadService {
         Long generatedThreadId = generateThreadId(threadId);
 
         // titleをFormから取得する;
-        forumThread.setTitle(threadPostForm.getTitle());
+        forumThread.setTitle(threadForm.getTitle());
     	
         // createdAt;
         forumThread.setCreatedAt(LocalDateTime.now());

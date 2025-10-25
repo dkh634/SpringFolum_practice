@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.dkh634.springforum.entity.Post;
-import jp.dkh634.springforum.form.ForumPostForm;
+import jp.dkh634.springforum.form.PostForm;
 import jp.dkh634.springforum.repository.PostRepository;
 
 /**
@@ -47,7 +47,7 @@ public class PostService {
      * @param threadId 紐づくスレッドID
      * @return 生成されたPostエンティティ
      */
-    public Post toEntity(ForumPostForm postForm, Long threadId) {
+    public Post toEntity(PostForm postForm, Long threadId) {
         Post post = new Post();
 
         // threadIdに紐づく最大contentIdを取得

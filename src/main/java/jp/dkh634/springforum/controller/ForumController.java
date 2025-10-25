@@ -16,11 +16,13 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jp.dkh634.springforum.entity.ForumThread;
 import jp.dkh634.springforum.entity.Post;
-import jp.dkh634.springforum.form.ForumPostForm;
-import jp.dkh634.springforum.form.ThreadPostForm;
+import jp.dkh634.springforum.form.PostForm;
+import jp.dkh634.springforum.form.ThreadForm;
 import jp.dkh634.springforum.service.PostService;
 import jp.dkh634.springforum.service.ThreadService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class ForumController {
 	@Autowired
@@ -41,8 +43,8 @@ public class ForumController {
 		 model.addAttribute("latestAllThread", latestAllThread); 
 		 
 	    // TodoFlashスコープに formが存在しない場合だけ新しく追加
-	    if (!model.containsAttribute("threadpostForm")) {
-	        model.addAttribute("threadpostForm", new ThreadPostForm());
+	    if (!model.containsAttribute("threadForm")) {
+	        model.addAttribute("threadForm", new ThreadForm());
 	    }
 	    
 	    // thread.htmlへ遷移する
@@ -53,12 +55,12 @@ public class ForumController {
 	 * スレッドを新規作成すると、タイトル情報をFormにバインディングする
 	 * 
 	 * @param model
-	 * @param threadpostForm
+	 * @param threadForm
 	 * @return
 	 */
 	@PostMapping("/api/thread")
 	public String displayForum(Model model,
-			@Valid @ModelAttribute ThreadPostForm threadpostForm,// Todo Form名はあとで見直します
+			@Valid @ModelAttribute ThreadForm threadForm,// Todo Form名はあとで見直します
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes){
 		
@@ -67,15 +69,15 @@ public class ForumController {
 	        
 	        // エラーのあるフォームをモデルに追加
 	        // エラーメッセージとフォームデータをフラッシュスコープに格納
-	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.threadpostForm", bindingResult);
-	        redirectAttributes.addFlashAttribute("threadpostForm", threadpostForm);
+	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.threadForm", bindingResult);
+	        redirectAttributes.addFlashAttribute("threadForm", threadForm);
 	        
 	        // thread.htmlに直接遷移
 	        return "redirect:/api/thread";
 	    }
 	    
 		// FormからEntityクラスへ詰め替える
-		ForumThread forumThread = threadservice.toEntity(threadpostForm);
+		ForumThread forumThread = threadservice.toEntity(threadForm);
 
 		// 新規スレッドの内容を保存する
 		threadservice.saveToDateBase(forumThread);
@@ -92,36 +94,36 @@ public class ForumController {
      * @return 掲示板画面（post.html）へ遷移
      */
 	@GetMapping("/api/post/{id}")
-	public String displayHome(Model model,@PathVariable("id") Long threadId,HttpSession session) {
-		
-		// スレッドIDに紐づく投稿一覧を取得する
+	public String displayHome(Model model,
+	                          @PathVariable("id") Long threadId,
+	                          HttpSession session) {
 	    List<Post> latestAllPosts = postservice.findAll(threadId);
-	    
-	    // 投稿一覧をrequestscopeに保存する
-	    model.addAttribute("latestAllPosts", latestAllPosts); 
+	    model.addAttribute("latestAllPosts", latestAllPosts);
 	    session.setAttribute("threadId", threadId);
-	    
-	    // タイトルを取得する
-	    String title = threadservice.findTitle(threadId);
-	    model.addAttribute("title",title);
-	    
-	    // TodoFlashスコープに formが存在しない場合だけ新しく追加
-	    if (!model.containsAttribute("forumPostForm")) {
-	        model.addAttribute("forumPostForm", new ForumPostForm());
+	    model.addAttribute("title", threadservice.findTitle(threadId));
+
+	    // postForm がモデルにない場合は追加
+	    if (!model.containsAttribute("postForm")) {
+	        model.addAttribute("postForm", new PostForm());
 	    }
+
 	    return "/post";
 	}
+
+
+
 	
     /**
      * 掲示板への投稿内容データをDBに保存し、対応するスレッドページにリダイレクトします。
      *
-     * @param postForm 掲示板画面からの投稿内容のデータ {@ForumPostForm}
+     * @param postForm 掲示板画面からの投稿内容のデータ {@PostForm}
      * @param session スレッドIDを保持 
      * @return 掲示板画面(displayHome)へのリダイレクトURL
      * @throws IllegalStateException セッションにthreadIdが存在しない場合
      */
+	
 	@PostMapping("/api/post")
-	public String reservePost(@Valid @ModelAttribute ForumPostForm postForm, 
+	public String reservePost(@Valid @ModelAttribute PostForm postForm, 
             BindingResult bindingResult,
             HttpSession session, 
             RedirectAttributes redirectAttributes,
@@ -141,9 +143,13 @@ public class ForumController {
 	        
 	        // エラーのあるフォームをモデルに追加
 	        // エラーメッセージとフォームデータをフラッシュスコープに格納
-	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.forumPostForm", bindingResult);
-	        redirectAttributes.addFlashAttribute("forumPostForm", postForm);
+	        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.postForm", bindingResult);
+	        redirectAttributes.addFlashAttribute("postForm", postForm);
 	        
+	        //バリデーションエラーをログに出力する
+	        bindingResult.getAllErrors().forEach(err -> 
+            log.warn("Validation error: {}", err)
+	        );
 	        // thread.htmlに直接遷移
 	        return "redirect:/api/post/" + threadId;
 	    }

@@ -29,7 +29,7 @@
         </div>
 
         <!-- フォーム部分 -->
-        <form method="post" action="/api/post" th:object="${forumPostForm}">
+        <form method="post" action="/api/post" th:object="${postForm}">
             
             <label for="authorName">名前</label><br />
             <input type="text" id="authorName" name="authorName" th:field="*{authorName}" />
