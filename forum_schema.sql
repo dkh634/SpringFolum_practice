@@ -26,23 +26,32 @@ CREATE TABLE IF NOT EXISTS public.post (
 ALTER TABLE IF EXISTS public.thread OWNER TO forumuser;
 ALTER TABLE IF EXISTS public.post OWNER TO forumuser;
 
+-- ==============================
+-- groups テーブル
+-- ==============================
+CREATE TABLE groups (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- ==============================
 -- users テーブル
+-- ==============================
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,  -- BCryptでハッシュ化
+    password VARCHAR(255) NOT NULL,
+    delete_flag BOOLEAN DEFAULT false,
     enabled BOOLEAN DEFAULT true
 );
 
--- roles テーブル
-CREATE TABLE roles (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL  -- 例: 'ROLE_ADMIN', 'ROLE_USER'
-);
-
--- users-roles テーブル
-CREATE TABLE user_roles (
-    user_id INT REFERENCES users(id),
-    role_id INT REFERENCES roles(id),
-    PRIMARY KEY (user_id, role_id)
+-- ==============================
+-- 中間テーブル user_groups
+-- ==============================
+CREATE TABLE user_groups (
+    user_id INT NOT NULL,
+    group_id INT NOT NULL,
+    PRIMARY KEY (user_id, group_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
 );
