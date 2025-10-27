@@ -10,9 +10,18 @@
   	<div id="header"></div>
         <h2>ユーザー一覧</h2>
         <hr>
-<!--        <div th:each="users : ${AllUser}">-->
-<!--	        <p th:text="${users.userId">ユーザー</p>-->
-<!--		</div>-->
+        <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>ユーザー名</th>
+        </tr>
+
+        <!-- AllUser（リスト）をループ -->
+        <tr th:each="user : ${AllUser}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.username}">ユーザー名</td>
+        </tr>
+    </table>
     <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/forum.js}"></script>
 </body>

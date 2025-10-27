@@ -1,5 +1,6 @@
 package jp.dkh634.springforum.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface UserRepository extends JpaRepository<Users, Long>{
 	@Query(value = "SELECT password FROM users WHERE username = :username AND delete_flag = false", nativeQuery = true)
 	Optional<String> findPasswordByUsername(@Param("username") String username);
 
+	@Query(value = "SELECT * FROM users ", nativeQuery = true)
+	List<Users>	findAllUsers();
+	
 }

@@ -35,6 +35,7 @@ public class Users {
     private String password;
 
     // 論理削除フラグ
+    @Column(name = "delete_flag")
     private boolean deleteFlag = false;
 
     // アカウント有効/無効フラグ
