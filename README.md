@@ -17,7 +17,7 @@
 |--------------|----------------------------------------------------------------------|
 | バックエンド | Spring BootによるWebアプリ実装（REST API、DI、MVC）                |
 | テスト       | JUnit & Mockitoによる単体テストの作成と自動実行                     |
-| フロントエンド | jQuery + HTML + CSSを用いた画面操作と連携                           |
+| フロントエンド | HTML + CSSを用いた画面操作と連携                           |
 | データベース | PostgreSQLを用いた永続化処理、SQL設計、CRUD操作                      |
 | CI/CD       | GitHub Actionsによる自動ビルド・テスト・デプロイ                       |
 | コンテナ    | Dockerによる環境構築・本番同等環境の再現                             |
@@ -32,7 +32,7 @@
 
 | 項目          | 技術                              |
 |---------------|-----------------------------------|
-| フレームワーク | Spring Boot                      |
+| フレームワーク | Spring Boot ,Spring Security       |
 | テスト        | JUnit, Mockito,testcontainer      |
 | フロントエンド | jQuery, HTML, CSS               |
 | データベース  | PostgreSQL                      |
